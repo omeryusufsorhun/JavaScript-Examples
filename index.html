@@ -1,17 +1,175 @@
-<!DOCTYPE html>
+<!-- var input = {
+	name:"john",
+	surname:"doe",
+	contact:{
+		local:"Istanbul",
+		phone:"+905412982394"
+	},
+	transaction :[
+		{description:"kira yatirdim" , amount:-1550},
+		{description:"su faturasi cok onemli" , amount:-250},
+		{description:"maas yatirimi" , amount:5500},
+		{description:"market harcamasi" , amount:-450},
+		{description:"telefon taksidi" , amount:-150},
+		{description:"borc odemesi" , amount:2250},
+		{description:"iddia kuponu" , amount:4050},
+		{description:"taksi ucreti" , amount:-1050},
+		{description:"emekli maas" , amount:3050}
+	]
+}
+
+return {doesBannedWord: true, isLocal:true, averageAmount:int, highestAmount:int,salary:int}
+
+Does banned word transaction içerisinde şu kelimeler geçiyor ise doesBannedWord true geçmiyorsa false  ('kira','borc','xx9856')
+
+Is local kişinin local değeri 'Istanbul' sa ve telefon nosu +90 ile başlıyorsa true yoksa false
+
+AverageAmount : yaptıgı transactionların ortamala değeri
+
+HighestAmount : yaptıgı transactionların en yüksek değeri 
+
+Salary : 1000 ile 6000 amount aralığındaki içerisinde maas kelimesi geçen en yüksek amountlu transaction salary oluyor -->
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <h1>Bu bir başlıktır</h1>
-    <button id="changeText">Change</button>
-    <div id="title">bu bir deneme yazısıdır</div>
-  
-   <script src="countries.js"></script>
-    
+    <h1>Convert to expected output an input.</h1>
+    <div class="container">
+        <h1 id="average">averageAmount : </h1>
+        <h1 id="banned">doesBannedWord :</h1>
+        <h1 id="highest">highestAmount :</h1>
+        <h1 id="isLocal">isLocal :</h1>
+        <h1 id="salary">salary :</h1>
+    </div>
+
 </body>
+<script>
+
+
+
+    var input = {
+
+        name: "john",
+        surname: "doe",
+        contact: {
+            local: "Istanbul",
+            phone: "+905412982394"
+        },
+        transaction: [
+            { description: "kira yatirdim", amount: -1550 },
+            { description: "su faturasi cok onemli", amount: -250 },
+            { description: "maas yatirimi", amount: 5500 },
+            { description: "market harcamasi", amount: -450 },
+            { description: "telefon taksidi", amount: -150 },
+            { description: "borc odemesi", amount: 2250 },
+            { description: "iddia kuponu", amount: 4050 },
+            { description: "taksi ucreti", amount: -1050 },
+            { description: "emekli maas", amount: 3050 }
+        ]
+    }
+
+    var responseObj = {
+        doesBannedWord: false,
+        isLocal: false,
+        averageAmount: 0,
+        highestAmount: 0,
+        salary: 0
+    }
+
+    const descArray = []
+    const amountArray = []
+    var salary = []
+    const bannedWords = ["kira", "xx9856", "borc"]
+
+    const checkBanned = () => {
+        input.transaction.map((desc) => {
+            descArray.push(desc.description)
+        })
+
+        descArray.forEach(e => {
+            bannedWords.forEach(j => {
+                if (e.includes(j)) {
+                    responseObj.doesBannedWord = true;
+                }
+            })
+        });
+    }
+
+    const isLocal = () => {
+        (input.contact.local.includes("Istanbul") && input.contact.phone.slice(0, 3) == "+90")
+        responseObj.isLocal = true;
+    }
+
+    const averageAmount = () => {
+        input.transaction.map((amount) => {
+            amountArray.push(amount.amount)
+        })
+
+        var allSums = amountArray.reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            responseObj.averageAmount
+        );
+        responseObj.averageAmount = Math.trunc(allSums / amountArray.length)
+    }
+
+    const highestAmount = () => {
+        amountArray.sort();
+        responseObj.highestAmount = amountArray[amountArray.length - 1]
+    }
+
+    const getSalary = () => {
+
+        for (let i = 0; i < input.transaction.length; i++) {
+            if (input.transaction[i].amount > 1000 && input.transaction[i].amount < 6000 && input.transaction[i].description.includes("maas")) {
+
+                salary.push(input.transaction[i])
+
+            }
+
+        }
+        salary.sort(
+            (a, b) => b.amount - a.amount,
+        )
+        console.log(salary);
+        responseObj.salary = salary[0].amount
+
+    }
+
+    function checkInput(input) {
+        checkBanned();
+        isLocal();
+        averageAmount();
+        highestAmount();
+        getSalary();
+        return responseObj
+
+    }
+
+    // checkInput(input);
+    console.log(checkInput(input));
+
+    var avg = document.getElementById("average")
+    var banned = document.getElementById("banned")
+    var highest = document.getElementById("highest")
+    var local = document.getElementById("isLocal")
+    var salary = document.getElementById("salary")
+
+    avg.innerHTML = responseObj.averageAmount
+    banned.innerHTML = responseObj.doesBannedWord
+    highest.innerHTML = responseObj.highestAmount
+    local.innerHTML = responseObj.isLocal
+    salary.innerHTML = responseObj.salary
+
+
+
+
+
+</script>
+
 </html>

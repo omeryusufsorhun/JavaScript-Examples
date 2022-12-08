@@ -1,0 +1,136 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    :root {
+        --navy: #2B3A55;
+        --peach: #CE7777;
+        --white: #F2E5E5;
+        --vintage: #E8C4C4;
+    }
+
+    .main {
+        justify-content: center;
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container {
+        display: flex;
+        height: 75px;
+        background-color: var(--white);
+
+
+    }
+
+    .container h1 {
+        margin-right: 15px;
+
+    }
+
+    .container input {
+        height: 40px;
+        margin-top: 20px;
+        font-size: 20px;
+        text-decoration: none;
+        padding-left: 15px;
+        border-radius: 15px;
+        border: 3px solid var(--navy);
+    }
+
+    .container input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    .btn-group button {
+        cursor: pointer;
+        font-size: x-large;
+        font-weight: 600;
+
+        background-color: var(--peach);
+        color: var(--navy);
+        border: none;
+        border-radius: 15px;
+        height: 36px;
+        width: 195px;
+    }
+
+    .btn-group button:hover {
+        background-color: var(--vintage);
+        transition: all .2s ease;
+    }
+</style>
+
+<body>
+
+
+    <div class="main">
+
+
+        <div class="container">
+            <h1 id="captcha-1"></h1>
+            <h1>+</h1>
+            <h1 id="captcha-2"></h1>
+            <h1> =</h1>
+            <input id="result" type="number">
+
+        </div>
+        <div class="btn-group">
+            <button id="calculateCaptcha">Hesapla</button>
+            <button type="submit" id="changeCaptcha">Değiştir</button>
+        </div>
+    </div>
+
+</body>
+<script>
+    const max = () => {
+        return Math.floor(Math.random() * 10)
+    }
+    var totalShould = 0;
+    var captcha_1 = document.getElementById("captcha-1")
+    var captcha_2 = document.getElementById("captcha-2")
+
+    var btn_calculate = document.getElementById("calculateCaptcha")
+    var btn_change = document.getElementById("changeCaptcha")
+
+
+    captcha_1.innerHTML = max();
+    captcha_2.innerHTML = max();
+
+    btn_calculate.addEventListener("click", (e) => {
+        totalShould = parseInt(captcha_1.innerText) + parseInt(captcha_2.innerText);
+        var result = document.getElementById("result")
+
+        console.log(totalShould)
+        if (totalShould == result.value) {
+            alert("Captcha Accepted")
+        }
+        else {
+            alert("Try again")
+        }
+
+    })
+
+    btn_change.addEventListener("click", () => {
+        captcha_1.innerHTML = max()
+        captcha_2.innerHTML = max()
+    })
+
+
+
+
+
+
+
+
+</script>
+
+</html>
